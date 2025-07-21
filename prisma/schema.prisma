@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phone       String
+  dateOfBirth DateTime?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  appointments Appointment[]
+
+  @@map("patients")
+}
+
+model Appointment {
+  id              String            @id @default(cuid())
+  patientId       String
+  service         String
+  preferredDate   DateTime
+  preferredTime   String
+  notes           String?
+  status          AppointmentStatus @default(PENDING)
+  actualDate      DateTime?
+  actualTime      String?
+  googleEventId   String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([preferredDate])
+  @@index([status])
+  @@map("appointments")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  duration    Int      // in minutes
+  price       Float
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  patientName String
+  rating      Int      // 1-5 stars
+  comment     String
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("reviews")
+}
+
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+}
