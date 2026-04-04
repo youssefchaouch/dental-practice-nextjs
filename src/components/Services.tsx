@@ -3,6 +3,11 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Clock, DollarSign, Shield, Smile, Sparkles, Zap } from 'lucide-react';
 import { useRef } from 'react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
+import { EffectCoverflow, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const Services = () => {
   const ref = useRef(null);
@@ -148,80 +153,68 @@ const Services = () => {
           </motion.p>
         </motion.div>
 
-        {/* Services Grid */}
-                <motion.div
-                  className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-                  variants={containerVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.2 }}
-                >
-                  {services.map((service, index) => (
-                    <motion.div
-                      key={index}
-                      variants={cardVariants}
-                      whileHover={{ 
-                        y: -10,
-                        transition: { type: 'spring', stiffness: 300 }
-                      }}
-                      className="group cursor-pointer"
-                    >
-                      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 h-full relative overflow-hidden">
-                        {/* Background Gradient on Hover */}
-                        <motion.div
-                          className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                        />
-                        
-                        {/* Service Icon */}
-                        <motion.div
-                          className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mb-6 relative z-10`}
-                          whileHover={{ 
-                            rotate: 360,
-                            scale: 1.1 
-                          }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <service.icon className="w-8 h-8 text-white" />
-                        </motion.div>
-        
-                        {/* Service Details */}
-                        <div className="relative z-10">
-                          <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
-                            {service.title}
-                          </h3>
-                          
-                          <p className="text-gray-600 mb-6 leading-relaxed">
-                            {service.description}
-                          </p>
-        
-                          {/* Price and Duration */}
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center space-x-2">
-                              <DollarSign className="w-5 h-5 text-green-500" />
-                              <span className="text-2xl font-bold text-gray-900">{service.price}</span>
-                            </div>
-                            <div className="flex items-center space-x-2 text-gray-500">
-                              <Clock className="w-5 h-5" />
-                              <span>{service.duration}</span>
-                            </div>
-                          </div>
-                          {/* Features List */}
-                          <ul className="mb-4 space-y-2">
-                            {service.features.map((feature, idx) => (
-                              <li key={idx} className="flex items-center text-gray-700">
-                                <span className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+        {/* Services Slider */}
+        <Swiper
+          modules={[EffectCoverflow, Navigation]}
+          effect="coverflow"
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={1}
+          loop={true}
+          navigation={true}
+          breakpoints={{
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 2,
+            slideShadows: false,
+          }}
+          className="w-full"
+        >
+          {services.map((service, index) => (
+            <SwiperSlide key={index}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 h-full relative overflow-hidden min-h-[340px] flex flex-col justify-between"
+              >
+                {/* Background Gradient on Hover */}
+                <motion.div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 hover:opacity-5 transition-opacity duration-300`} />
+
+                {/* Service Icon */}
+                <motion.div className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mb-6 relative z-10`} whileHover={{ rotate: 360, scale: 1.1 }} transition={{ duration: 0.6 }}>
+                  <service.icon className="w-8 h-8 text-white" />
                 </motion.div>
-              </div>
-            </div>
-          );
-        };
-        
-        export default Services;
+
+                {/* Service Details */}
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-blue-600 transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  {/* Features List */}
+                  <ul className="mb-4 space-y-2">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center text-gray-700">
+                        <span className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </div>
+  );
+};
+
+export default Services;
