@@ -2,6 +2,8 @@
 
 import { prisma } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export default async function PatientsPage() {
   const patients = await prisma.patient.findMany({ orderBy: { createdAt: 'desc' } });
   return (
