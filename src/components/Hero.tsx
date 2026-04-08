@@ -1,250 +1,191 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ArrowDown, Calendar, Shield, Star } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { useRef } from 'react';
 
 const Hero = () => {
-  const floatingAnimation = {
-    y: [-20, 20],
-    transition: {
-      duration: 4,
-      repeat: Infinity,
-      repeatType: 'reverse' as const,
-      ease: [0.42, 0, 0.58, 1] // cubic-bezier for 'easeInOut'
-    }
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start']
+  });
 
-  const heroVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1,
-        ease: [0.6, -0.05, 0.01, 0.99] as any // <-- Type assertion fixes TS error
-      }
-    }
-  };
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: [0.42, 0, 0.58, 1] as any} // cubic-bezier for 'easeInOut'
-    }
-  };
+  const navLinks = [
+    { label: 'About', href: '#about' },
+    { label: 'Services', href: '#services' },
+    { label: 'Reviews', href: '#reviews' },
+    { label: 'Book', href: '#book' },
+  ];
 
-  const handleBookingClick = () => {
-    document.getElementById('book')?.scrollIntoView({ 
-      behavior: 'smooth' 
-    });
-  };
-
-  const handleLearnMoreClick = () => {
-    document.getElementById('about')?.scrollIntoView({ 
-      behavior: 'smooth' 
-    });
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    element?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
-          animate={{
-            ...floatingAnimation,
-            transition: {
-              ...floatingAnimation.transition,
-              delay: 1,
-              ease: "easeInOut"
-            }
-          }}
-        />
-        <motion.div
-          className="absolute top-40 right-10 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
-          animate={{
-            ...floatingAnimation,
-            transition: {
-              ...floatingAnimation.transition,
-              delay: 1,
-              ease: "easeInOut"
-            }
-          }}
-        />
-        <motion.div
-          className="absolute -bottom-8 left-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20"
-          animate={{
-            ...floatingAnimation,
-            transition: {
-              ...floatingAnimation.transition,
-              delay: 1,
-              ease: "easeInOut"
-            }
-          }}
-        />
-      </div>
-
+    <div ref={containerRef} className="relative min-h-screen overflow-hidden grain-overlay">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[var(--color-background)]" />
+      
       {/* Navigation */}
       <motion.nav 
-        className="relative z-10 px-6 py-6"
-        initial={{ opacity: 0, y: -50 }}
+        className="relative z-20 px-6 md:px-12 lg:px-24 py-8"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <motion.div
-            className="text-2xl font-bold text-white"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <div className="flex justify-between items-center">
+          <Link 
+            href="/" 
+            className="font-serif text-xl md:text-2xl tracking-tight text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors duration-300"
           >
             Dr. Maha Chaouch
-          </motion.div>
+          </Link>
           
-          <div className="hidden md:flex space-x-8">
-            {['Home', 'About', 'Services', 'Reviews', 'Book'].map((item, index) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-white hover:text-blue-300 transition-colors duration-300"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.1 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (item === 'Home') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    document.getElementById(item.toLowerCase())?.scrollIntoView({ 
-                      behavior: 'smooth' 
-                    });
-                  }
-                }}
+          <div className="hidden md:flex items-center gap-12">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-sm font-sans tracking-wide text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors duration-300"
               >
-                {item}
-              </motion.a>
+                {link.label}
+              </a>
             ))}
           </div>
+
+          <a
+            href="#book"
+            onClick={(e) => handleNavClick(e, '#book')}
+            className="hidden md:flex items-center gap-2 px-6 py-3 text-sm font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
+          >
+            Book Now
+          </a>
         </div>
       </motion.nav>
 
       {/* Main Hero Content */}
-      <div className="relative z-10 px-6 py-20">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="text-center"
-            variants={heroVariants}
-            initial="hidden"
-            animate="visible"
+      <div className="relative z-10 px-6 md:px-12 lg:px-24 pt-12 md:pt-24 pb-32">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-center min-h-[70vh]">
+          {/* Left Content */}
+          <motion.div 
+            className="max-w-2xl"
+            style={{ opacity: textOpacity }}
           >
-            {/* Main Headline */}
-            <motion.h1
-              className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-              variants={itemVariants}
-            >
-              Your Perfect
-              <motion.span
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: 'linear'
-                }}
-                style={{
-                  backgroundSize: '200% 200%'
-                }}
-              >
-                Smile Awaits
-              </motion.span>
-            </motion.h1>
-
-            {/* Subtitle */}
             <motion.p
-              className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto"
-              variants={itemVariants}
+              className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--color-accent)] mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Experience exceptional dental care with cutting-edge technology and 
-              a gentle, personalized approach to your oral health.
+              Private Dental Practice
             </motion.p>
 
-            {/* Stats */}
-            <motion.div
-              className="flex flex-wrap justify-center gap-8 mb-12"
-              variants={itemVariants}
+            <motion.h1
+              className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.05] tracking-tight text-[var(--color-text-primary)] mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
             >
-              {[
-                { icon: Star, number: '500+', label: 'Happy Patients' },
-                { icon: Shield, number: '15+', label: 'Years Experience' },
-                { icon: Calendar, number: '24/7', label: 'Online Booking' }
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  className="text-center"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <stat.icon className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">{stat.number}</div>
-                  <div className="text-blue-200 text-sm">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
+              Your Smile,<br />
+              <span className="italic">Perfected.</span>
+            </motion.h1>
 
-            {/* CTA Buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-              variants={itemVariants}
+            <motion.p
+              className="text-lg md:text-xl font-sans text-[var(--color-text-secondary)] leading-relaxed mb-12 max-w-lg"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <motion.button
-                onClick={handleBookingClick}
-                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-full shadow-lg"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.2)'
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400 }}
+              Experience exceptional dental care in a refined, calming environment. 
+              Where advanced techniques meet personalized attention.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              <a
+                href="#book"
+                onClick={(e) => handleNavClick(e, '#book')}
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
               >
-                Book Appointment
-              </motion.button>
+                Book an Appointment
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
               
-              <motion.button
-                onClick={handleLearnMoreClick}
-                className="px-8 py-4 border-2 border-white text-white font-semibold rounded-full backdrop-blur-sm"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400 }}
+              <a
+                href="#about"
+                onClick={(e) => handleNavClick(e, '#about')}
+                className="inline-flex items-center justify-center px-8 py-4 text-base font-medium tracking-wide border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-primary)] transition-all duration-300"
               >
                 Learn More
-              </motion.button>
+              </a>
             </motion.div>
+          </motion.div>
+
+          {/* Right Image - Asymmetric, bleeding off edge */}
+          <motion.div 
+            className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[55%] h-[400px] md:h-[500px] lg:h-[80vh]"
+            style={{ y: imageY }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+          >
+            <div className="relative w-full h-full overflow-hidden">
+              {/* Placeholder for hero image - elegant dental environment */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-muted)] to-[var(--color-border)]">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center px-8">
+                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-card)] flex items-center justify-center border border-[var(--color-border)]">
+                      <span className="font-serif text-4xl text-[var(--color-accent)]">MC</span>
+                    </div>
+                    <p className="font-serif text-2xl text-[var(--color-text-primary)] mb-2">Dr. Maha Chaouch</p>
+                    <p className="text-sm text-[var(--color-text-muted)]">Modern Dental Excellence</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Decorative element */}
+              <div className="absolute bottom-0 left-0 w-1/3 h-1/4 bg-[var(--color-accent)] opacity-10" />
+            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Animated Scroll Indicator */}
+      {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-12 left-6 md:left-12 lg:left-24 flex items-center gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          onClick={handleLearnMoreClick}
-          className="cursor-pointer"
-        >
-          <ArrowDown className="w-6 h-6 text-white" />
-        </motion.div>
+        <div className="w-px h-16 bg-[var(--color-border)] relative overflow-hidden">
+          <motion.div 
+            className="absolute top-0 left-0 w-full bg-[var(--color-accent)]"
+            animate={{ 
+              height: ['0%', '100%', '0%'],
+              top: ['0%', '0%', '100%']
+            }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity,
+              ease: 'easeInOut'
+            }}
+          />
+        </div>
+        <span className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)]">
+          Scroll
+        </span>
       </motion.div>
     </div>
   );

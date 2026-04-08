@@ -1,78 +1,40 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Clock, DollarSign, Shield, Smile, Sparkles, Zap } from 'lucide-react';
-import { useRef } from 'react';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/navigation';
-import { EffectCoverflow, Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { motion } from 'framer-motion';
+import { Crown, Droplets, Gem, Scan, Shield, Sparkles } from 'lucide-react';
 
 const Services = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start']
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-
   const services = [
     {
-      icon: Smile,
-      title: 'Regular Cleaning',
-      description: 'Professional dental cleaning and comprehensive oral examination to maintain your dental health.',
-      price: '$120',
-      duration: '60 min',
-      gradient: 'from-blue-500 to-cyan-500',
-      features: ['Deep cleaning', 'Plaque removal', 'Fluoride treatment', 'Oral health assessment']
+      icon: Droplets,
+      title: 'Professional Cleaning',
+      description: 'Comprehensive oral examination with thorough cleaning to maintain optimal dental health.',
     },
     {
       icon: Sparkles,
       title: 'Teeth Whitening',
-      description: 'Advanced whitening treatment to brighten your smile and boost your confidence.',
-      price: '$300',
-      duration: '90 min',
-      gradient: 'from-purple-500 to-pink-500',
-      features: ['Professional whitening', 'Custom trays', 'Long-lasting results', 'Safe procedure']
+      description: 'Advanced whitening treatments to restore brilliance and enhance your natural smile.',
     },
     {
       icon: Shield,
-      title: 'Dental Filling',
-      description: 'High-quality composite or amalgam fillings to restore damaged teeth.',
-      price: '$180',
-      duration: '45 min',
-      gradient: 'from-green-500 to-teal-500',
-      features: ['Tooth-colored fillings', 'Pain-free procedure', 'Durable materials', 'Natural appearance']
+      title: 'Restorative Fillings',
+      description: 'Tooth-colored composite restorations that blend seamlessly with your natural teeth.',
     },
     {
-      icon: Zap,
-      title: 'Root Canal',
-      description: 'Advanced root canal treatment to save infected teeth and eliminate pain.',
-      price: '$800',
-      duration: '120 min',
-      gradient: 'from-orange-500 to-red-500',
-      features: ['Pain relief', 'Infection treatment', 'Tooth preservation', 'Advanced techniques']
+      icon: Scan,
+      title: 'Root Canal Therapy',
+      description: 'Gentle endodontic treatment to preserve your natural tooth and eliminate discomfort.',
     },
     {
-      icon: Shield,
-      title: 'Crown Placement',
-      description: 'Custom dental crowns to restore strength and appearance of damaged teeth.',
-      price: '$1,200',
-      duration: '90 min',
-      gradient: 'from-indigo-500 to-purple-500',
-      features: ['Custom fit', 'Natural appearance', 'Long-lasting', 'Strength restoration']
+      icon: Crown,
+      title: 'Crown & Bridge',
+      description: 'Custom-crafted restorations designed to rebuild strength and restore aesthetics.',
     },
     {
-      icon: Sparkles,
-      title: 'Dental Implant',
-      description: 'Permanent tooth replacement solution with titanium implants and custom crowns.',
-      price: '$2,500',
-      duration: '180 min',
-      gradient: 'from-pink-500 to-rose-500',
-      features: ['Permanent solution', 'Natural feel', 'Bone integration', 'Lifetime investment']
-    }
+      icon: Gem,
+      title: 'Dental Implants',
+      description: 'Permanent tooth replacement solutions for a confident, complete smile.',
+    },
   ];
 
   const containerVariants = {
@@ -80,140 +42,115 @@ const Services = () => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.6,
         staggerChildren: 0.1
       }
     }
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' as any}
+      transition: { duration: 0.6, ease: 'easeOut' }
     }
   };
 
   return (
-    <div ref={ref} className="relative py-20 bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden">
-      {/* Animated Background */}
-      <motion.div
-        className="absolute inset-0 opacity-30"
-        style={{ y: backgroundY }}
-      >
-        <div className="absolute top-1/4 left-10 w-72 h-72 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full filter blur-3xl opacity-20" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full filter blur-3xl opacity-20" />
-      </motion.div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+    <section id="services" className="relative py-24 md:py-32 bg-[var(--color-background)]">
+      {/* Subtle curved divider at top */}
+      <div className="absolute top-0 left-0 right-0 h-20 bg-[var(--color-muted)]" style={{ 
+        clipPath: 'ellipse(70% 100% at 50% 0%)' 
+      }} />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
         {/* Section Header */}
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
+          className="mb-16 md:mb-24"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+        >
+          <p className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
+            Our Services
+          </p>
+          <h2 className="font-serif text-4xl md:text-5xl text-[var(--color-text-primary)] max-w-2xl leading-tight">
+            Comprehensive care for every aspect of your dental health
+          </h2>
+        </motion.div>
+
+        {/* Services Grid - Editorial 2-column layout */}
+        <motion.div
+          className="grid md:grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-12 md:gap-y-16"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={service.title}
+              variants={itemVariants}
+              className="group"
+            >
+              <div className="flex gap-6">
+                {/* Icon */}
+                <div className="flex-shrink-0">
+                  <div className="w-14 h-14 flex items-center justify-center border border-[var(--color-border)] group-hover:border-[var(--color-accent)] transition-colors duration-500">
+                    <service.icon className="w-6 h-6 text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors duration-500" />
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="pt-1">
+                  <h3 className="font-serif text-xl md:text-2xl text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors duration-300">
+                    {service.title}
+                  </h3>
+                  <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative line */}
+              <div className="mt-8 md:mt-12 h-px bg-[var(--color-border)]">
+                <motion.div 
+                  className="h-full bg-[var(--color-accent)] origin-left"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          className="mt-20 md:mt-28 text-center"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h2
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <p className="text-lg text-[var(--color-text-secondary)] mb-8 max-w-xl mx-auto">
+            Each treatment is tailored to your unique needs, delivered with precision and care.
+          </p>
+          <a
+            href="#book"
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#book')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-flex items-center justify-center px-8 py-4 text-base font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
           >
-            Our{' '}
-            <motion.span
-              className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'linear'
-              }}
-              style={{
-                backgroundSize: '200% 200%'
-              }}
-            >
-              Services
-            </motion.span>
-          </motion.h2>
-          
-          <motion.p
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Comprehensive dental care tailored to your needs with the latest technology 
-            and techniques for optimal results.
-          </motion.p>
+            Schedule Your Visit
+          </a>
         </motion.div>
-
-        {/* Services Slider */}
-        <Swiper
-          modules={[EffectCoverflow, Navigation]}
-          effect="coverflow"
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={1}
-          loop={true}
-          navigation={true}
-          breakpoints={{
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 100,
-            modifier: 2,
-            slideShadows: false,
-          }}
-          className="w-full"
-        >
-          {services.map((service, index) => (
-            <SwiperSlide key={index}>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 h-full relative overflow-hidden min-h-[340px] flex flex-col justify-between"
-              >
-                {/* Background Gradient on Hover */}
-                <motion.div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 hover:opacity-5 transition-opacity duration-300`} />
-
-                {/* Service Icon */}
-                <motion.div className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mb-6 relative z-10`} whileHover={{ rotate: 360, scale: 1.1 }} transition={{ duration: 0.6 }}>
-                  <service.icon className="w-8 h-8 text-white" />
-                </motion.div>
-
-                {/* Service Details */}
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-blue-600 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {service.description}
-                  </p>
-
-                  {/* Features List */}
-                  <ul className="mb-4 space-y-2">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center text-gray-700">
-                        <span className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
       </div>
-    </div>
+    </section>
   );
 };
 

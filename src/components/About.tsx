@@ -1,254 +1,157 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Award, Heart, Users, Zap } from 'lucide-react';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const About = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start']
-  });
+  const credentials = [
+    'Doctor of Dental Surgery (DDS)',
+    'Advanced Cosmetic Dentistry Certification',
+    'Member, American Dental Association',
+    'Specialized in Implant Dentistry',
+  ];
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' as any }
-    }
-  };
-
-  const features = [
-    {
-      icon: Heart,
-      title: 'Gentle Care',
-      description: 'We prioritize your comfort with pain-free treatments and a calming environment.',
-      color: 'from-pink-500 to-rose-500'
-    },
-    {
-      icon: Zap,
-      title: 'Advanced Technology',
-      description: 'State-of-the-art equipment ensures precise, efficient, and comfortable procedures.',
-      color: 'from-yellow-500 to-orange-500'
-    },
-    {
-      icon: Users,
-      title: 'Family Friendly',
-      description: 'Comprehensive dental care for patients of all ages, from children to seniors.',
-      color: 'from-blue-500 to-cyan-500'
-    },
-    {
-      icon: Award,
-      title: 'Excellence Award',
-      description: 'Recognized for outstanding patient care and innovative dental treatments.',
-      color: 'from-purple-500 to-indigo-500'
-    }
+  const stats = [
+    { number: '15+', label: 'Years Experience' },
+    { number: '500+', label: 'Happy Patients' },
+    { number: '98%', label: 'Success Rate' },
   ];
 
   return (
-    <div ref={ref} className="relative py-20 bg-white overflow-hidden">
-      {/* Background Elements */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50"
-        style={{ y }}
-      />
-      
-      <motion.div
-        className="absolute top-20 right-10 w-64 h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full opacity-10"
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 180, 360]
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear'
-        }}
-      />
-
-      <motion.div
-        className="relative z-10 max-w-7xl mx-auto px-6"
-        style={{ opacity }}
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Side - Doctor Info */}
-          <motion.div variants={itemVariants}>
-            <motion.h2
-              className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
-              variants={itemVariants}
-            >
-              Meet{' '}
-              <motion.span
-                className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'linear'
-                }}
-                style={{
-                  backgroundSize: '200% 200%'
-                }}
-              >
-                Dr. Maha Chaouch
-              </motion.span>
-            </motion.h2>
-
-            <motion.p
-              className="text-lg text-gray-600 mb-8 leading-relaxed"
-              variants={itemVariants}
-            >
-              With over 15 years of experience in modern dentistry, Dr. Johnson combines 
-              cutting-edge technology with a gentle, patient-centered approach. She is 
-              dedicated to helping you achieve optimal oral health while ensuring your 
-              comfort throughout every visit.
-            </motion.p>
-
-            <motion.div
-              className="space-y-4 mb-8"
-              variants={itemVariants}
-            >
-              {[
-                'Doctor of Dental Surgery (DDS) - Harvard University',
-                'Certified in Advanced Cosmetic Dentistry',
-                'Member of American Dental Association',
-                'Specialized in Implant Dentistry'
-              ].map((credential, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <motion.div
-                    className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                    whileHover={{ scale: 1.5 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  />
-                  <span className="text-gray-700">{credential}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Doctor Image */}
-            <motion.div
-              className="relative"
-              variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div className="w-64 h-64 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto lg:mx-0 relative overflow-hidden">
-                <motion.div
-                  className="absolute inset-4 bg-white rounded-xl flex items-center justify-center"
-                  whileHover={{ rotate: 5 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <span className="text-gray-500 text-center flex flex-col items-center">
-                    Dr. Maha Chaouch
+    <section id="about" className="relative py-24 md:py-32 bg-[var(--color-muted)]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Left - Image */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="relative aspect-[4/5] bg-[var(--color-card)] overflow-hidden">
+              {/* Placeholder for doctor photo */}
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--color-card)] to-[var(--color-border)]">
+                <div className="text-center">
+                  <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-[var(--color-background)] shadow-lg">
                     <img
-                      src="/maha.jpg" // <-- correct
+                      src="/maha.jpg"
                       alt="Dr. Maha Chaouch"
-                      className="w-24 h-24 rounded-full mt-2 object-cover border-2 border-blue-200"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-[var(--color-muted)]"><span class="font-serif text-4xl text-[var(--color-accent)]">MC</span></div>';
+                        }
+                      }}
                     />
-                    <span className="text-sm mt-2">Professional Photo</span>
-                  </span>
-                </motion.div>
+                  </div>
+                  <p className="font-serif text-2xl text-[var(--color-text-primary)]">Dr. Maha Chaouch</p>
+                  <p className="text-sm text-[var(--color-text-muted)] mt-2">Doctor of Dental Surgery</p>
+                </div>
+              </div>
+              
+              {/* Decorative accent */}
+              <div className="absolute bottom-0 right-0 w-1/3 h-24 bg-[var(--color-accent)] opacity-10" />
+            </div>
+
+            {/* Floating accent box */}
+            <motion.div
+              className="absolute -bottom-8 -right-8 w-32 h-32 border border-[var(--color-accent)] bg-[var(--color-background)] hidden lg:flex items-center justify-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <div className="text-center">
+                <span className="block font-serif text-3xl text-[var(--color-accent)]">15+</span>
+                <span className="text-xs uppercase tracking-wider text-[var(--color-text-muted)]">Years</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Right Side - Features Grid */}
+          {/* Right - Content */}
           <motion.div
-            className="grid sm:grid-cols-2 gap-6"
-            variants={containerVariants}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="group"
-                variants={itemVariants}
-                whileHover={{ y: -10 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 h-full">
-                  <motion.div
-                    className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4`}
-                    whileHover={{ rotate: 360, scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <feature.icon className="w-6 h-6 text-white" />
-                  </motion.div>
-                  
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    {feature.title}
-                  </h3>
-                  
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+            <p className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
+              About Dr. Chaouch
+            </p>
+            
+            <h2 className="font-serif text-4xl md:text-5xl text-[var(--color-text-primary)] mb-8 leading-tight">
+              Dedicated to your comfort and dental excellence
+            </h2>
+
+            <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed">
+              <p>
+                With over 15 years of experience in modern dentistry, Dr. Maha Chaouch combines 
+                cutting-edge technology with a gentle, patient-centered approach. Her practice 
+                is built on the belief that exceptional dental care should feel luxurious, not clinical.
+              </p>
+              <p>
+                Every treatment is delivered with precision, compassion, and an unwavering 
+                commitment to your comfort. From routine care to complex procedures, 
+                you&apos;ll experience dentistry reimagined.
+              </p>
+            </div>
+
+            {/* Credentials */}
+            <div className="mt-10 space-y-3">
+              {credentials.map((credential, index) => (
+                <motion.div
+                  key={credential}
+                  className="flex items-center gap-4"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
+                  <span className="text-[var(--color-text-primary)]">{credential}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Stats - Mobile only */}
+            <div className="mt-12 grid grid-cols-3 gap-8 lg:hidden">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <span className="block font-serif text-3xl text-[var(--color-accent)]">{stat.number}</span>
+                  <span className="text-xs uppercase tracking-wider text-[var(--color-text-muted)]">{stat.label}</span>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats - Desktop */}
         <motion.div
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8"
-          variants={containerVariants}
+          className="hidden lg:grid grid-cols-3 gap-16 mt-24 pt-16 border-t border-[var(--color-border)]"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          {[
-            { number: '500+', label: 'Happy Patients', suffix: '' },
-            { number: '15', label: 'Years Experience', suffix: '+' },
-            { number: '98', label: 'Success Rate', suffix: '%' },
-            { number: '24', label: 'Available', suffix: '/7' }
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <motion.div
-                className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2"
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2, type: 'spring', stiffness: 200 }}
-              >
-                {stat.number}{stat.suffix}
-              </motion.div>
-              <div className="text-gray-600 font-medium">{stat.label}</div>
-            </motion.div>
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <span className="block font-serif text-5xl text-[var(--color-text-primary)] mb-2">{stat.number}</span>
+              <span className="text-sm uppercase tracking-[0.15em] text-[var(--color-text-muted)]">{stat.label}</span>
+            </div>
           ))}
         </motion.div>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 };
 
