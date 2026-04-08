@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Check, ChevronLeft, ChevronRight, Clock, Phone, RefreshCw, User, X } from 'lucide-react';
+import { Check, Clock, Phone, RefreshCw, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Appointment {
@@ -44,7 +44,6 @@ export default function AppointmentsPage() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [stats, setStats] = useState<Stats>({ pending: 0, approved: 0, rescheduled: 0 });
   const [loading, setLoading] = useState(true);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     fetchAppointments();
@@ -176,76 +175,37 @@ export default function AppointmentsPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Calendar */}
         <div className="lg:col-span-2 bg-[var(--color-card)] border border-[var(--color-border)] p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-serif text-xl text-[var(--color-text-primary)]">Calendar</h3>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                className="p-2 hover:bg-[var(--color-muted)] rounded transition-colors"
-              >
-                <ChevronLeft className="w-5 h-5 text-[var(--color-text-muted)]" />
-              </button>
-              <span className="text-sm font-medium text-[var(--color-text-primary)] min-w-[140px] text-center">
-                {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-              </span>
-              <button
-                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                className="p-2 hover:bg-[var(--color-muted)] rounded transition-colors"
-              >
-                <ChevronRight className="w-5 h-5 text-[var(--color-text-muted)]" />
-              </button>
-            </div>
-          </div>
+          <h3 className="font-serif text-xl text-[var(--color-text-primary)] mb-6">Calendar</h3>
 
           <Calendar
-            mode="single"
             selected={selectedDate}
-            onSelect={setSelectedDate}
-            month={currentMonth}
-            onMonthChange={setCurrentMonth}
+            onSelect={(date) => setSelectedDate(date)}
             className="w-full"
-            classNames={{
-              months: "w-full",
-              month: "w-full",
-              table: "w-full border-collapse",
-              head_row: "flex w-full",
-              head_cell: "flex-1 text-center text-xs font-medium text-[var(--color-text-muted)] py-2",
-              row: "flex w-full",
-              cell: "flex-1 text-center p-0",
-              day: "w-full h-12 flex flex-col items-center justify-center text-sm hover:bg-[var(--color-muted)] rounded transition-colors cursor-pointer",
-              day_selected: "bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary)]",
-              day_today: "border border-[var(--color-accent)]",
-              day_outside: "text-[var(--color-text-muted)] opacity-50",
-            }}
-            components={{
-              Day: ({ date, ...props }) => {
-                const dateAppointments = getDateAppointments(date);
-                const isSelected = selectedDate?.toDateString() === date.toDateString();
-                const isToday = new Date().toDateString() === date.toDateString();
-                
-                return (
-                  <button
-                    onClick={() => setSelectedDate(date)}
-                    className={`
-                      w-full h-12 flex flex-col items-center justify-center text-sm rounded transition-colors cursor-pointer
-                      ${isSelected ? 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)]' : 'hover:bg-[var(--color-muted)]'}
-                      ${isToday && !isSelected ? 'border border-[var(--color-accent)]' : ''}
-                    `}
-                  >
-                    <span>{date.getDate()}</span>
-                    {dateAppointments.length > 0 && (
-                      <div className="flex gap-0.5 mt-1">
-                        {dateAppointments.slice(0, 3).map((apt, i) => (
-                          <div
-                            key={i}
-                            className={`w-1.5 h-1.5 rounded-full ${getStatusColor(apt.status)}`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </button>
-                );
-              }
+            dayRender={({ date, selected }) => {
+              const dateAppointments = getDateAppointments(date);
+              const isToday = new Date().toDateString() === date.toDateString();
+              
+              return (
+                <div
+                  className={`
+                    w-full h-12 flex flex-col items-center justify-center text-sm rounded transition-colors
+                    ${selected ? 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)]' : ''}
+                    ${isToday && !selected ? 'border border-[var(--color-accent)]' : ''}
+                  `}
+                >
+                  <span>{date.getDate()}</span>
+                  {dateAppointments.length > 0 && (
+                    <div className="flex gap-0.5 mt-1">
+                      {dateAppointments.slice(0, 3).map((apt, i) => (
+                        <div
+                          key={i}
+                          className={`w-1.5 h-1.5 rounded-full ${getStatusColor(apt.status)}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
             }}
           />
 
