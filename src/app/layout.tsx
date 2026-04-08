@@ -1,4 +1,5 @@
 import { WebSocketProvider } from "@/components/WebSocketProvider";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
@@ -42,6 +43,7 @@ export default function RootLayout({
         <WebSocketProvider>
           {children}
         </WebSocketProvider>
+        <Analytics />
       </body>
     </html>
   );
