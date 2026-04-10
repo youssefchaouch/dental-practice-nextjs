@@ -29,10 +29,17 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="relative aspect-[4/5] bg-[var(--color-card)] overflow-hidden">
-              {/* Placeholder for doctor photo */}
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--color-card)] to-[var(--color-border)]">
-                <div className="text-center">
-                  <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-[var(--color-background)] shadow-lg">
+              {/* Clinic image */}
+              <img
+                src="/taswira1.jpg"
+                alt="Dr. Maha Chaouch's Dental Clinic"
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Overlay with doctor info */}
+              <div className="absolute inset-0 flex items-end justify-center pb-8 bg-gradient-to-t from-black/60 via-transparent to-transparent">
+                <div className="text-center text-white">
+                  <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-4 border-[var(--color-background)] shadow-lg">
                     <img
                       src="/maha.jpg"
                       alt="Dr. Maha Chaouch"
@@ -42,18 +49,15 @@ const About = () => {
                         target.style.display = 'none';
                         const parent = target.parentElement;
                         if (parent) {
-                          parent.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-[var(--color-muted)]"><span class="font-serif text-4xl text-[var(--color-accent)]">MC</span></div>';
+                          parent.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-[var(--color-accent)]"><span class="font-serif text-3xl text-white">MC</span></div>';
                         }
                       }}
                     />
                   </div>
-                  <p className="font-serif text-2xl text-[var(--color-text-primary)]">Dr. Maha Chaouch</p>
-                  <p className="text-sm text-[var(--color-text-muted)] mt-2">Doctor of Dental Surgery</p>
+                  <p className="font-serif text-xl text-white">Dr. Maha Chaouch</p>
+                  <p className="text-sm text-gray-200 mt-1">Modern Dental Excellence</p>
                 </div>
               </div>
-              
-              {/* Decorative accent */}
-              <div className="absolute bottom-0 right-0 w-1/3 h-24 bg-[var(--color-accent)] opacity-10" />
             </div>
 
             {/* Floating accent box */}
