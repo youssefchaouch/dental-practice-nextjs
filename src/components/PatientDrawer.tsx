@@ -46,18 +46,18 @@ export interface ProgressNote {
 
 interface PatientDrawerProps {
   open: boolean
-  onOpenChange: (open: boolean) => void
+  onOpenChangeAction: (open: boolean) => void
   patient: Patient | null
 }
 
-export function PatientDrawer({ open, onOpenChange, patient }: PatientDrawerProps) {
+export function PatientDrawer({ open, onOpenChangeAction, patient }: PatientDrawerProps) {
   if (!patient) return null
 
   const initials = `${patient.firstName[0]}${patient.lastName[0]}`.toUpperCase()
   const age = new Date().getFullYear() - new Date(patient.dateOfBirth).getFullYear()
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={onOpenChangeAction}>
       <SheetContent side="right" className="w-full sm:w-3/4 lg:w-2/3 overflow-y-auto">
         <SheetHeader className="mb-6">
           <div className="flex items-center gap-4">

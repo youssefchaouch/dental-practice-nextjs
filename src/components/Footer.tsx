@@ -1,7 +1,8 @@
 'use client';
 
-import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
+import { FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -25,11 +26,16 @@ const Footer = () => {
   const socialLinks = [
     { icon: Instagram, href: '#', label: 'Instagram' },
     { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
   ];
 
+  const phoneNumber = '+216 23 770 581';
+  const whatsappNumber = '+216 23 770 581';
+  const address = 'Oryx Medical Center, Manar 2, Tunis, Tunisia';
+  const mapsLink = 'https://maps.app.goo.gl/y3anxC9ddDkVYPkJ9';
+  const email = 'drmahachaouch@gmail.com';
+
   return (
-    <footer className="bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
+    <footer id="footer" className="bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand Column */}
@@ -98,27 +104,42 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0 text-[var(--color-accent)]" />
-                <span className="text-sm text-[var(--color-primary-foreground)]/70">
-                  123 Dental Street<br />
-                  Medical District, City 10001
-                </span>
+                <a
+                  href={mapsLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {address}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
                 <a 
-                  href="tel:+1234567890" 
+                  href={`tel:${phoneNumber}`} 
                   className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
                 >
-                  +1 (234) 567-890
+                  {phoneNumber}
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaWhatsapp className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
+                <a 
+                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {whatsappNumber}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
                 <a 
-                  href="mailto:info@drmahachaouch.com" 
+                  href={`mailto:${email}`}
                   className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
                 >
-                  info@drmahachaouch.com
+                  {email}
                 </a>
               </li>
             </ul>

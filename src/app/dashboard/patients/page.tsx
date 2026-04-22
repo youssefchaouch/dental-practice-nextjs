@@ -1,34 +1,62 @@
 "use client"
 
-import React, { useState, useMemo } from 'react'
-import { Search } from 'lucide-react'
+import { PatientDrawer, type Patient as PatientType } from '@/components/PatientDrawer'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
-import { PatientDrawer, type Patient } from '@/components/PatientDrawer'
-import { mockPatients } from '@/data/mockPatients'
+import { Search } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function PatientsPage() {
+  const [patients, setPatients] = useState<PatientType[]>([])
+  const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(null)
+  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const res = await fetch('/api/patients')
+        if (res.ok) {
+          const data = await res.json()
+          setPatients(data)
+        } else {
+          console.error('Failed to fetch patients')
+        }
+      } catch (error) {
+        console.error('Error fetching patients:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPatients()
+  }, [])
 
   // Filter patients based on search query
   const filteredPatients = useMemo(() => {
-    if (!searchQuery.trim()) return mockPatients
+    if (!searchQuery.trim()) return patients
 
     const query = searchQuery.toLowerCase()
-    return mockPatients.filter(
+    return patients.filter(
       (patient) =>
         patient.firstName.toLowerCase().includes(query) ||
         patient.lastName.toLowerCase().includes(query) ||
         patient.email.toLowerCase().includes(query) ||
         patient.phone.includes(query)
     )
-  }, [searchQuery])
+  }, [searchQuery, patients])
 
-  const handleSelectPatient = (patient: Patient) => {
+  const handleSelectPatient = (patient: PatientType) => {
     setSelectedPatient(patient)
     setIsDrawerOpen(true)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
   }
 
   return (
@@ -116,7 +144,7 @@ export default function PatientsPage() {
                       {selectedPatient.firstName} {selectedPatient.lastName}
                     </h2>
                     <p className="text-[var(--color-text-muted)]">
-                      {new Date().getFullYear() - new Date(selectedPatient.dateOfBirth).getFullYear()} years old
+                      {selectedPatient.dateOfBirth ? new Date(selectedPatient.dateOfBirth).getFullYear() - new Date().getFullYear() : 'Age unknown'} years old
                     </p>
                   </div>
                 </div>
@@ -135,41 +163,34 @@ export default function PatientsPage() {
                     </div>
                   </div>
 
-                  {/* Medical Info */}
+                  {/* Medical Info - Placeholder, as schema doesn't have these fields */}
                   <div>
                     <h3 className="font-semibold text-[var(--color-text-primary)] mb-3">Medical</h3>
                     <div className="space-y-2 text-sm">
-                      {selectedPatient.allergies.length > 0 && (
-                        <p className="text-[var(--color-text-muted)]">
-                          Allergies: <span className="text-red-600">{selectedPatient.allergies.join(', ')}</span>
-                        </p>
-                      )}
-                      {selectedPatient.medicalConditions.length > 0 && (
-                        <p className="text-[var(--color-text-muted)]">
-                          Conditions: <span className="text-[var(--color-text-primary)]">{selectedPatient.medicalConditions.join(', ')}</span>
-                        </p>
-                      )}
+                      <p className="text-[var(--color-text-muted)]">
+                        No medical notes available (extend schema if needed).
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Quick Stats */}
+                {/* Quick Stats - Placeholder */}
                 <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--color-border)]">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[var(--color-accent)]">
-                      {selectedPatient.appointments.length}
+                      0
                     </p>
                     <p className="text-xs text-[var(--color-text-muted)] uppercase">Appointments</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[var(--color-accent)]">
-                      {selectedPatient.progressNotes.length}
+                      0
                     </p>
                     <p className="text-xs text-[var(--color-text-muted)] uppercase">Notes</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[var(--color-accent)]">
-                      {Object.values(selectedPatient.teeth).filter((state) => state === 'healthy').length}
+                      0
                     </p>
                     <p className="text-xs text-[var(--color-text-muted)] uppercase">Healthy Teeth</p>
                   </div>
@@ -195,7 +216,7 @@ export default function PatientsPage() {
       {/* Patient Details Drawer */}
       <PatientDrawer
         open={isDrawerOpen}
-        onOpenChange={setIsDrawerOpen}
+        onOpenChangeAction={setIsDrawerOpen}
         patient={selectedPatient}
       />
     </div>

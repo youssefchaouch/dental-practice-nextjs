@@ -39,6 +39,9 @@ export default function BookingForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState<BookingFormData | null>(null);
 
+  const phoneNumber = '+216 23 770 581';
+  const email = 'drmahachaouch@gmail.com';
+
   const {
     register,
     handleSubmit,
@@ -189,7 +192,12 @@ export default function BookingForm() {
                 </div>
                 <div>
                   <p className="font-medium text-[var(--color-text-primary)]">Phone</p>
-                  <p className="text-sm text-[var(--color-text-muted)]">+1 (234) 567-890</p>
+                  <a 
+                    href={`tel:${phoneNumber}`}
+                    className="text-sm text-[var(--color-accent)] hover:text-[var(--color-accent)]/80 transition-colors"
+                  >
+                    {phoneNumber}
+                  </a>
                 </div>
               </div>
 
@@ -199,7 +207,12 @@ export default function BookingForm() {
                 </div>
                 <div>
                   <p className="font-medium text-[var(--color-text-primary)]">Email</p>
-                  <p className="text-sm text-[var(--color-text-muted)]">info@drmahachaouch.com</p>
+                  <a 
+                    href={`mailto:${email}`}
+                    className="text-sm text-[var(--color-accent)] hover:text-[var(--color-accent)]/80 transition-colors"
+                  >
+                    {email}
+                  </a>
                 </div>
               </div>
             </div>
@@ -274,7 +287,7 @@ export default function BookingForm() {
                   type="tel"
                   {...register('phone')}
                   className="w-full px-4 py-3 border border-[var(--color-border)] bg-[var(--color-background)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none transition-colors"
-                  placeholder="+1 (234) 567-890"
+                  placeholder="+216 23 770 581"
                 />
                 {errors.phone && (
                   <p className="text-sm text-[var(--color-error)] mt-1">{errors.phone.message}</p>

@@ -1,15 +1,17 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Menu, Phone, X } from 'lucide-react';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end start']
+    offset: ['start start', 'end start'],
   });
 
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
@@ -20,173 +22,172 @@ const Hero = () => {
     { label: 'Services', href: '#services' },
     { label: 'Reviews', href: '#reviews' },
     { label: 'Book', href: '#book' },
+    { label: 'Contact', href: '#footer' },
   ];
+
+  const phoneNumber = '+216 23 770 581';
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
     element?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
   };
 
   return (
     <div ref={containerRef} className="relative min-h-screen overflow-hidden grain-overlay">
+      
       {/* Background */}
       <div className="absolute inset-0 bg-[var(--color-background)]" />
-      
-      {/* Navigation */}
-      <motion.nav 
-        className="relative z-20 px-6 md:px-12 lg:px-24 py-8"
+
+      {/* NAVBAR */}
+      <motion.nav
+        className="relative z-20 px-6 md:px-12 lg:px-24 py-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
       >
         <div className="flex justify-between items-center">
-          <Link 
-            href="/" 
-            className="font-serif text-xl md:text-2xl tracking-tight text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors duration-300"
+
+          {/* Logo */}
+          <Link
+            href="/"
+            className="font-serif text-xl md:text-2xl tracking-tight text-[var(--color-text-primary)]"
           >
             Dr. Maha Chaouch
           </Link>
-          
+
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-12">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-sans tracking-wide text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors duration-300"
+                className="text-sm tracking-wide text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <a
-            href="#book"
-            onClick={(e) => handleNavClick(e, '#book')}
-            className="hidden md:flex items-center gap-2 px-6 py-3 text-sm font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href={`tel:${phoneNumber}`}
+              className="flex items-center gap-2 px-5 py-2.5 text-sm bg-[var(--color-accent)] text-white hover:opacity-90 transition"
+            >
+              <Phone className="w-4 h-4" />
+              Call
+            </a>
+
+            <a
+              href="#book"
+              onClick={(e) => handleNavClick(e, '#book')}
+              className="px-5 py-2.5 text-sm bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
+            >
+              Book
+            </a>
+          </div>
+
+          {/* Mobile Button */}
+          <button
+            className="md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
           >
-            Book Now
-          </a>
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden mt-6 flex flex-col gap-6 bg-[var(--color-background)] p-6 border border-[var(--color-border)]"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-base text-[var(--color-text-secondary)]"
+              >
+                {link.label}
+              </a>
+            ))}
+
+            <a
+              href={`tel:${phoneNumber}`}
+              className="flex items-center gap-2 px-4 py-3 bg-[var(--color-accent)] text-white"
+            >
+              <Phone className="w-4 h-4" />
+              Call Us
+            </a>
+
+            <a
+              href="#book"
+              onClick={(e) => handleNavClick(e, '#book')}
+              className="px-4 py-3 bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
+            >
+              Book Now
+            </a>
+          </motion.div>
+        )}
       </motion.nav>
 
-      {/* Main Hero Content */}
+      {/* HERO CONTENT */}
       <div className="relative z-10 px-6 md:px-12 lg:px-24 pt-12 md:pt-24 pb-32">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-center min-h-[70vh]">
-          {/* Left Content */}
-          <motion.div 
-            className="max-w-2xl"
-            style={{ opacity: textOpacity }}
-          >
-            <motion.p
-              className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--color-accent)] mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              Private Dental Practice
-            </motion.p>
+        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
 
-            <motion.h1
-              className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.05] tracking-tight text-[var(--color-text-primary)] mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
+          {/* LEFT */}
+          <motion.div style={{ opacity: textOpacity }} className="max-w-2xl">
+            <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)] mb-6">
+              Private Dental Practice
+            </p>
+
+            <h1 className="font-serif text-5xl md:text-7xl leading-tight mb-8">
               Your Smile,<br />
               <span className="italic">Perfected.</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              className="text-lg md:text-xl font-sans text-[var(--color-text-secondary)] leading-relaxed mb-12 max-w-lg"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              Experience exceptional dental care in a refined, calming environment. 
-              Where advanced techniques meet personalized attention.
-            </motion.p>
+            <p className="text-lg text-[var(--color-text-secondary)] mb-10 max-w-lg">
+              Experience exceptional dental care in a refined, calming environment.
+            </p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-            >
+            <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="#book"
                 onClick={(e) => handleNavClick(e, '#book')}
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
+                className="flex items-center justify-center gap-2 px-6 py-4 bg-[var(--color-primary)] text-white"
               >
-                Book an Appointment
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                Book Appointment
+                <ArrowRight className="w-4 h-4" />
               </a>
-              
+
               <a
                 href="#about"
                 onClick={(e) => handleNavClick(e, '#about')}
-                className="inline-flex items-center justify-center px-8 py-4 text-base font-medium tracking-wide border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-primary)] transition-all duration-300"
+                className="px-6 py-4 border border-[var(--color-border)]"
               >
                 Learn More
               </a>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Image - Asymmetric, bleeding off edge */}
-          <motion.div 
-            className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[55%] h-[400px] md:h-[500px] lg:h-[80vh]"
-            style={{ y: imageY }}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-          >
-            <div className="relative w-full h-full overflow-hidden">
-              {/* Placeholder for hero image - elegant dental environment */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-muted)] to-[var(--color-border)]">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center px-8">
-                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-card)] flex items-center justify-center border border-[var(--color-border)]">
-                      <span className="font-serif text-4xl text-[var(--color-accent)]">MC</span>
-                    </div>
-                    <p className="font-serif text-2xl text-[var(--color-text-primary)] mb-2">Dr. Maha Chaouch</p>
-                    <p className="text-sm text-[var(--color-text-muted)]">Modern Dental Excellence</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Decorative element */}
-              <div className="absolute bottom-0 left-0 w-1/3 h-1/4 bg-[var(--color-accent)] opacity-10" />
             </div>
           </motion.div>
+
+          {/* RIGHT IMAGE */}
+          <motion.div
+            className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[55%] h-[400px] lg:h-[80vh]"
+            style={{ y: imageY }}
+          >
+            <div className="w-full h-full bg-gradient-to-br from-[var(--color-muted)] to-[var(--color-border)] flex items-center justify-center">
+              <span className="text-2xl font-serif text-[var(--color-text-muted)]">
+                Your Image Here
+              </span>
+            </div>
+          </motion.div>
+
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-12 left-6 md:left-12 lg:left-24 flex items-center gap-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-      >
-        <div className="w-px h-16 bg-[var(--color-border)] relative overflow-hidden">
-          <motion.div 
-            className="absolute top-0 left-0 w-full bg-[var(--color-accent)]"
-            animate={{ 
-              height: ['0%', '100%', '0%'],
-              top: ['0%', '0%', '100%']
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          />
-        </div>
-        <span className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)]">
-          Scroll
-        </span>
-      </motion.div>
     </div>
   );
 };

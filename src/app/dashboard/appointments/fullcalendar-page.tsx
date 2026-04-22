@@ -1,11 +1,10 @@
 "use client";
 import '@fullcalendar/common/main.css';
+import type { EventClickArg } from "@fullcalendar/core"; // <-- import from core
 import dayGridPlugin from '@fullcalendar/daygrid';
 import '@fullcalendar/daygrid/main.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from "@fullcalendar/react";
-import type { EventClickArg } from "@fullcalendar/core"; // <-- import from core
-import '@fullcalendar/react/dist/vdom';
 import { useEffect, useState } from 'react';
 import DashboardLayout from '../layout';
 
