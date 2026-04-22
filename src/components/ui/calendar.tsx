@@ -1,74 +1,126 @@
-import { cn } from "@/lib/utils";
-import { addDays, addMonths, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek, subMonths } from "date-fns";
-import * as React from "react";
+import { cn } from "@/lib/utils"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  addDays,
+  addMonths,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+} from "date-fns"
+import * as React from "react"
+import { buttonVariants } from "./button"
 
 interface CalendarProps {
-  selected?: Date;
-  onSelect?: (date: Date) => void;
-  className?: string;
-  dayRender?: (props: { date: Date; selected: boolean; hovered: boolean }) => React.ReactNode;
+  selected?: Date
+  onSelect?: (date: Date) => void
+  className?: string
+  dayRender?: (props: {
+    date: Date
+    selected: boolean
+    hovered: boolean
+  }) => React.ReactNode
 }
 
-export function Calendar({ selected, onSelect, className, dayRender }: CalendarProps) {
-  const [currentMonth, setCurrentMonth] = React.useState<Date>(selected || new Date());
-  const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
+export function Calendar({
+  selected,
+  onSelect,
+  className,
+  dayRender,
+}: CalendarProps) {
+  const [currentMonth, setCurrentMonth] = React.useState<Date>(
+    selected || new Date()
+  )
+  const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null)
 
-  const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(monthStart);
-  const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
-  const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
+  const monthStart = startOfMonth(currentMonth)
+  const monthEnd = endOfMonth(monthStart)
+  const startDate = startOfWeek(monthStart, { weekStartsOn: 1 })
+  const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 })
 
-  const days: Date[] = [];
-  let day = startDate;
+  const days: Date[] = []
+  let day = startDate
   while (day <= endDate) {
-    days.push(day);
-    day = addDays(day, 1);
+    days.push(day)
+    day = addDays(day, 1)
   }
 
   return (
-    <div className={cn("w-full max-w-md mx-auto", className)}>
-      <div className="flex justify-between items-center mb-4">
+    <div className={cn("w-full p-3", className)}>
+      <div className="flex items-center justify-between mb-4">
         <button
-          className="px-2 py-1 rounded hover:bg-blue-100"
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          )}
         >
-          &lt;
+          <ChevronLeft className="h-4 w-4" />
         </button>
-        <span className="font-bold text-lg">{format(currentMonth, "MMMM yyyy")}</span>
+        <span className="text-sm font-medium">
+          {format(currentMonth, "MMMM yyyy")}
+        </span>
         <button
-          className="px-2 py-1 rounded hover:bg-blue-100"
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          )}
         >
-          &gt;
+          <ChevronRight className="h-4 w-4" />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1 mb-2">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-          <div key={d} className="text-center font-semibold text-gray-500 py-1">
+          <div
+            key={d}
+            className="text-center text-xs font-medium text-muted-foreground py-1"
+          >
             {d}
           </div>
         ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
         {days.map((date) => {
-          const isSelected = selected ? isSameDay(date, selected) : false;
-          const isHovered = hoveredDate ? isSameDay(date, hoveredDate) : false;
+          const isSelected = selected ? isSameDay(date, selected) : false
+          const isHovered = hoveredDate ? isSameDay(date, hoveredDate) : false
+          const isCurrentMonth = isSameMonth(date, currentMonth)
+          const isToday = isSameDay(date, new Date())
+
           return (
             <button
               key={date.toISOString()}
               className={cn(
-                "w-full h-10 flex items-center justify-center rounded-lg transition",
-                isSelected && "bg-blue-600 text-white",
-                isHovered && "bg-blue-100",
-                isSameMonth(date, currentMonth) ? "" : "text-gray-400"
+                "relative flex items-center justify-center rounded-md text-sm transition-colors",
+                "h-9 w-full p-0 font-normal",
+                isCurrentMonth
+                  ? "text-foreground"
+                  : "text-muted-foreground opacity-50",
+                isSelected &&
+                  "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+                !isSelected && isHovered && "bg-accent",
+                !isSelected && isToday && "bg-accent text-accent-foreground",
+                "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               )}
               onClick={() => onSelect?.(date)}
               onMouseEnter={() => setHoveredDate(date)}
               onMouseLeave={() => setHoveredDate(null)}
             >
-              {dayRender ? dayRender({ date, selected: isSelected, hovered: isHovered }) : date.getDate()}
+              {dayRender ? (
+                dayRender({ date, selected: isSelected, hovered: isHovered })
+              ) : (
+                <time dateTime={format(date, "yyyy-MM-dd")}>
+                  {date.getDate()}
+                </time>
+              )}
             </button>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

@@ -1,21 +1,33 @@
 import { WebSocketProvider } from "@/components/WebSocketProvider";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Dr. Maha Chaouch - Modern Dental Care",
-  description: "Professional dental services with modern care and advanced technology. Book your appointment today.",
+  title: "Dr. Maha Chaouch | Private Dental Practice",
+  description: "Experience exceptional dental care with Dr. Maha Chaouch. Luxury private dental practice offering personalized treatments in a refined, calming environment.",
+  keywords: ["dentist", "dental care", "private practice", "Dr. Maha Chaouch", "cosmetic dentistry"],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1C1917",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -26,11 +38,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${cormorantGaramond.variable} ${dmSans.variable} font-sans antialiased`}
       >
         <WebSocketProvider>
           {children}
         </WebSocketProvider>
+        <Analytics />
       </body>
     </html>
   );
