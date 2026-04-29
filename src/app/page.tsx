@@ -10,7 +10,7 @@ import Services from '@/components/Services';
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--color-background)]">
-      <Hero />
+      <Hero locale="fr" />
       <About />
       <Services />
       <Reviews />

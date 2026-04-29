@@ -1,38 +1,40 @@
 'use client';
 
 import { Facebook, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Reviews', href: '#reviews' },
-    { label: 'Book Appointment', href: '#book' },
+    { label: tNav('about'), href: '#about' },
+    { label: tNav('services'), href: '#services' },
+    { label: tNav('reviews'), href: '#reviews' },
+    { label: tNav('bookNow'), href: '#book' },
   ];
 
   const services = [
-    'Professional Cleaning',
-    'Teeth Whitening',
-    'Restorative Fillings',
-    'Root Canal Therapy',
-    'Crown & Bridge',
-    'Dental Implants',
-  ];
-
-  const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Facebook, href: '#', label: 'Facebook' },
+    'Consultations & Assessment',
+    'Prevention & Hygiene',
+    'Dental Care',
+    'Smile Aesthetics',
+    'Prosthetics & Implants',
+    'Orthodontics with Clear Aligners',
   ];
 
   const phoneNumber = '+216 23 770 581';
   const whatsappNumber = '+216 23 770 581';
-  const address = 'Oryx Medical Center, Manar 2, Tunis, Tunisia';
   const mapsLink = 'https://maps.app.goo.gl/y3anxC9ddDkVYPkJ9';
-  const email = 'drmahachaouch@gmail.com';
+  const emailAddress = 'drmahachaouch@gmail.com';
+
+  const socialLinks = [
+    { icon: Instagram, href: 'https://www.instagram.com/dr.maha.chaouch?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', label: 'Instagram' },
+    { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61562106102547', label: 'Facebook' },
+  ];
 
   return (
     <footer id="footer" className="bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
@@ -43,21 +45,14 @@ const Footer = () => {
             <Link href="/" className="font-serif text-2xl tracking-tight text-[var(--color-primary-foreground)]">
               Dr. Maha Chaouch
             </Link>
-            <p className="mt-4 text-sm text-[var(--color-primary-foreground)]/70 leading-relaxed">
+            <p className="mt-4 text-sm text-[var(--color-primary-foreground)]/80 leading-relaxed">
               Luxury private dental practice offering personalized care in a refined, 
               calming environment.
             </p>
-            
-            {/* Social Links */}
             <div className="flex gap-4 mt-6">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="w-10 h-10 flex items-center justify-center border border-[var(--color-primary-foreground)]/20 text-[var(--color-primary-foreground)]/70 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all duration-300"
-                >
-                  <social.icon className="w-4 h-4" />
+              {[{ icon: Instagram, label: 'Instagram' }, { icon: Facebook, label: 'Facebook' }].map((s) => (
+                <a key={s.label} href="#" aria-label={s.label} className="w-10 h-10 flex items-center justify-center border border-[var(--color-primary-foreground)]/20 text-[var(--color-primary-foreground)]/70 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all duration-300">
+                  <s.icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
@@ -65,7 +60,9 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-serif text-lg mb-6 text-[var(--color-primary-foreground)]">Quick Links</h4>
+            <h4 className="font-serif text-lg mb-6 text-[var(--color-primary-foreground)]">
+              {t('quickLinksTitle')}
+            </h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
@@ -75,7 +72,7 @@ const Footer = () => {
                       e.preventDefault();
                       document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors duration-300"
+                    className="text-sm text-[var(--color-primary-foreground)]/80 hover:text-[var(--color-accent)] transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -84,23 +81,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="font-serif text-lg mb-6 text-[var(--color-primary-foreground)]">Services</h4>
-            <ul className="space-y-3">
-              {services.map((service) => (
-                <li key={service}>
-                  <span className="text-sm text-[var(--color-primary-foreground)]/70">
-                    {service}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact */}
           <div>
-            <h4 className="font-serif text-lg mb-6 text-[var(--color-primary-foreground)]">Contact</h4>
+            <h4 className="font-serif text-lg mb-6 text-[var(--color-primary-foreground)]">
+              {t('contactTitle')}
+            </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0 text-[var(--color-accent)]" />
@@ -108,57 +93,52 @@ const Footer = () => {
                   href={mapsLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                  className="text-sm text-[var(--color-primary-foreground)]/80 hover:text-[var(--color-accent)] transition-colors duration-300"
                 >
-                  {address}
+                  {t('address')}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
-                <a 
-                  href={`tel:${phoneNumber}`} 
-                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                <a
+                  href={`tel:${phoneNumber}`}
+                  className="text-sm text-[var(--color-primary-foreground)]/80 hover:text-[var(--color-accent)] transition-colors duration-300"
                 >
                   {phoneNumber}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
-                <a 
+                <a
                   href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                  className="text-sm text-[var(--color-primary-foreground)]/80 hover:text-[var(--color-accent)] transition-colors duration-300"
                 >
                   {whatsappNumber}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 flex-shrink-0 text-[var(--color-accent)]" />
-                <a 
-                  href={`mailto:${email}`}
-                  className="text-sm text-[var(--color-primary-foreground)]/70 hover:text-[var(--color-accent)] transition-colors"
+                <a
+                  href={`mailto:${emailAddress}`}
+                  className="text-sm text-[var(--color-primary-foreground)]/80 hover:text-[var(--color-accent)] transition-colors duration-300"
                 >
-                  {email}
+                  {emailAddress}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-[var(--color-primary-foreground)]/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-[var(--color-primary-foreground)]/50">
-              {currentYear} Dr. Maha Chaouch Dental Practice. All rights reserved.
+              {currentYear} Dr. Maha Chaouch Dental Practice. {t('rights')}
             </p>
             <div className="flex gap-6">
-              <a href="#" className="text-xs text-[var(--color-primary-foreground)]/50 hover:text-[var(--color-accent)] transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-xs text-[var(--color-primary-foreground)]/50 hover:text-[var(--color-accent)] transition-colors">
-                Terms of Service
-              </a>
+              <a href="#" className="text-xs text-[var(--color-primary-foreground)]/50 hover:text-[var(--color-accent)] transition-colors">{t('privacy')}</a>
+              <a href="#" className="text-xs text-[var(--color-primary-foreground)]/50 hover:text-[var(--color-accent)] transition-colors">{t('terms')}</a>
             </div>
           </div>
         </div>

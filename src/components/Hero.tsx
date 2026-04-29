@@ -1,11 +1,16 @@
 'use client';
 
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Menu, Phone, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 
-const Hero = () => {
+const Hero = ({ locale }: { locale: string }) => {
+  const t = useTranslations('hero');
+  const tNav = useTranslations('nav');
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,11 +23,11 @@ const Hero = () => {
   const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const navLinks = [
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Reviews', href: '#reviews' },
-    { label: 'Book', href: '#book' },
-    { label: 'Contact', href: '#footer' },
+    { label: tNav('about'), href: '#about' },
+    { label: tNav('services'), href: '#services' },
+    { label: tNav('reviews'), href: '#reviews' },
+    { label: tNav('book'), href: '#book' },
+    { label: tNav('contact'), href: '#footer' },
   ];
 
   const phoneNumber = '+216 23 770 581';
@@ -36,7 +41,6 @@ const Hero = () => {
 
   return (
     <div ref={containerRef} className="relative min-h-screen overflow-hidden grain-overlay">
-      
       {/* Background */}
       <div className="absolute inset-0 bg-[var(--color-background)]" />
 
@@ -47,7 +51,6 @@ const Hero = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex justify-between items-center">
-
           {/* Logo */}
           <Link
             href="/"
@@ -72,20 +75,20 @@ const Hero = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher currentLocale={locale} />
             <a
               href={`tel:${phoneNumber}`}
-              className="flex items-center gap-2 px-5 py-2.5 text-sm bg-[var(--color-accent)] text-white hover:opacity-90 transition"
+              className="flex items-center gap-2 px-6 py-3 text-sm font-medium tracking-wide bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent)]/90 transition-all duration-300"
             >
               <Phone className="w-4 h-4" />
-              Call
+              {tNav('call')}
             </a>
-
             <a
               href="#book"
               onClick={(e) => handleNavClick(e, '#book')}
-              className="px-5 py-2.5 text-sm bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
+              className="flex items-center gap-2 px-6 py-3 text-sm font-medium tracking-wide bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-text-primary)] transition-all duration-300"
             >
-              Book
+              {tNav('bookNow')}
             </a>
           </div>
 
@@ -121,7 +124,7 @@ const Hero = () => {
               className="flex items-center gap-2 px-4 py-3 bg-[var(--color-accent)] text-white"
             >
               <Phone className="w-4 h-4" />
-              Call Us
+              {tNav('call')}
             </a>
 
             <a
@@ -129,7 +132,7 @@ const Hero = () => {
               onClick={(e) => handleNavClick(e, '#book')}
               className="px-4 py-3 bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
             >
-              Book Now
+              {tNav('bookNow')}
             </a>
           </motion.div>
         )}
@@ -138,20 +141,20 @@ const Hero = () => {
       {/* HERO CONTENT */}
       <div className="relative z-10 px-6 md:px-12 lg:px-24 pt-12 md:pt-24 pb-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
-
           {/* LEFT */}
           <motion.div style={{ opacity: textOpacity }} className="max-w-2xl">
             <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)] mb-6">
-              Private Dental Practice
+              {t('badge')}
             </p>
 
             <h1 className="font-serif text-5xl md:text-7xl leading-tight mb-8">
-              Your Smile,<br />
-              <span className="italic">Perfected.</span>
+              {t('headline1')}
+              <br />
+              <span className="italic">{t('headline2')}</span>
             </h1>
 
             <p className="text-lg text-[var(--color-text-secondary)] mb-10 max-w-lg">
-              Experience exceptional dental care in a refined, calming environment.
+              {t('subtext')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -160,7 +163,7 @@ const Hero = () => {
                 onClick={(e) => handleNavClick(e, '#book')}
                 className="flex items-center justify-center gap-2 px-6 py-4 bg-[var(--color-primary)] text-white"
               >
-                Book Appointment
+                {tNav('book')}
                 <ArrowRight className="w-4 h-4" />
               </a>
 
@@ -169,23 +172,26 @@ const Hero = () => {
                 onClick={(e) => handleNavClick(e, '#about')}
                 className="px-6 py-4 border border-[var(--color-border)]"
               >
-                Learn More
+                {t('learnBtn')}
               </a>
             </div>
           </motion.div>
 
           {/* RIGHT IMAGE */}
           <motion.div
-            className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[55%] h-[400px] lg:h-[80vh]"
+            className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[45%] h-[320px] md:h-[420px] lg:h-[60vh]"
             style={{ y: imageY }}
           >
-            <div className="w-full h-full bg-gradient-to-br from-[var(--color-muted)] to-[var(--color-border)] flex items-center justify-center">
-              <span className="text-2xl font-serif text-[var(--color-text-muted)]">
-                Your Image Here
-              </span>
-            </div>
+            <img
+              src="/taswira1.jpg"
+              alt="Clinic main area"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '';
+                (e.target as HTMLImageElement).parentElement!.style.background = 'var(--color-muted)';
+              }}
+            />
           </motion.div>
-
         </div>
       </div>
     </div>

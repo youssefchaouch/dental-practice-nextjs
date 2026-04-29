@@ -5,27 +5,25 @@
 
 /* Luxury Dental Practice Design System */
 :root {
-  /* Primary Colors */
-  --color-primary: #2C3E50;
-  --color-primary-foreground: #FAF8F5;
-  
-  /* Secondary Colors */
-  --color-secondary: #5D6D7E;
-  --color-secondary-foreground: #FAF8F5;
-  
-  /* Background - Warm Cream/Off-white */
-  --color-background: #FAF8F5;
-  --color-foreground: #1C1917;
-  
-  /* Accent - Warm Gold */
-  --color-accent: #B8860B;
-  --color-accent-foreground: #1C1917;
-  
-  /* Text Colors */
-  --color-text-primary: #1C1917;
-  --color-text-secondary: #44403C;
-  --color-text-muted: #78716C;
-  
+  /* Backgrounds */
+  --color-background: #faf6f3;        /* warm off-white — main bg */
+  --color-muted: #f0dfd7;             /* YOUR COLOR — section bg */
+  --color-card: #f7ede7;              /* slightly warmer card bg */
+
+  /* Borders */
+  --color-border: #dfc8bc;            /* warm muted border */
+  --color-border-secondary: #e8d5cb;  /* lighter border */
+
+  /* Accent & Primary */
+  --color-accent: #b87c6a;            /* deep warm terracotta */
+  --color-primary: #2c1f1a;           /* deep warm charcoal — matches card text */
+  --color-primary-foreground: #faf6f3;
+
+  /* Text */
+  --color-text-primary: #2c1f1a;      /* deep warm charcoal */
+  --color-text-secondary: #6b4a3e;    /* medium warm brown */
+  --color-text-muted: #a07d72;        /* muted rose brown */
+
   /* Card Styling */
   --color-card: #FFFFFF;
   --color-card-foreground: #1C1917;
